@@ -1,0 +1,175 @@
+                               RDD Basics
+
+  An RDD in Spark is simply an immutable distributed collection of objects. Each RDD
+  is split into multiple partitions, which may be computed on different nodes of the cluster.
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+         Users create RDDs in two ways:
+~~~~~~~~~~~~~~~~~~~~~~~~~~~
+1. Loading an External dataset.
+example:
+val rdd = sc.textFile("Path of the file")
+where sc is the Sparkcontext ==>Driver programs access Spark through a SparkContext object, which represents a connection to a computing cluster. 
+---either you can Load the file into the HDFS or your local mechine 
+
+2. Distributing a collection of Objects in their driver Program(Parallelize-means patitions)
+example:
+
+val rdd = sc.parallelize(List(1,2,3,7,58,7) 
+ rdd.collect()
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  Spark program and shell session will work 
+
+1. Create some input RDDs from external data.
+2. Transform them to define new RDDs using transformations like filter().
+3. Ask Spark to persist() any intermediate RDDs that will need to be reused.
+4. Launch actions such as count() and first() to kick off a parallel computation,
+which is then optimized and executed by Spark.
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~`
+                           RDD Operations
+
+ ===> RDDs support two types of operations, transformations and actions
+1.Transformations
+2.Action
+ 
+Transformation==>Transformations are operations on RDDs that return a new RDD, such as map and filter.
+
+Action==>Actions are operations that return a result back to the driver program.
+
+val rdd = sc.parallelize(List(1,2,3,3)
+
+                   Action 
+   
+Function               example                        Result                                             
+
+1. collect()          rdd.collect()                    {1,2,3,3}
+
+2.count()             rdd.count()                       4
+
+3.take(num)          rdd.take(2)                       {1, 2}
+
+
+4.top(num)           rdd.top(2)                         {3,3}
+
+5.reduce(func)      rdd.reduce((x, y) => x + y)           9
+(Combine the 
+elements of the 
+RDD together in 
+parallel (e.g. 
+sum) 
+
+6.fold(zero)(func)   rdd.fold(0)((x, y) => x + y)        9
+   (Same as reduce 
+but with the 
+provided zero 
+value )
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+        Transformation    
+Transformation on an rdd containing{1,2,3,3)
+
+function name                         example                                     Result 
+
+1.map()                                rdd.map(x => x + 1)                         {2,3,4,4)
+
+map-->Apply a function to each
+element in the RDD and return
+an RDD of the result.
+
+2. flatMap()                          rdd.flatMap(x => x.to(3))                  {1,2,3,2,3,3,3}
+
+flatMap-->Apply a function to each
+element in the RDD and return
+an RDD of the contents of the
+iterators returned. Often used to
+extract words
+
+3.filter()                         rdd.filter(x => x != 1)                       {2, 3, 3}
+
+4.distinct()                         rdd.distinct()                              {1, 2, 3}
+
+Distinct--->Remove duplicates
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+                 Persistence (Caching)
+
+* Spark RDDs are lazily evaluated, and sometimes we may wish to
+ use the same RDD multiple times. If we do this naively, Spark will recompute the RDD
+ and all of its dependencies each time we call an action on the RDD. This can be especially
+ expensive for iterative algorithms, which look at the data many times. Another trivial
+* Cache() is the same as calling persist() with the default storage level
+
+Scala double execute example
+
+val input = sc.parallelize(List(1,2,3,3))
+val result = input.map(x => x*x)
+result.persist(org.apache.spark.storage.StorageLevel.DISK_ONLY)
+println(result.count())
+println(result.collect().mkString(","))
+
+To avoid computing an RDD multiple times, we can ask Spark to persist the data. When
+we ask Spark to persist an RDD, the nodes that compute the RDD store their partitions.
+If a node that has data persisted on it fails, Spark will recompute the lost partitions of
+the data when needed. We can also replicate our data on multiple nodes if we want to
+be able to handle node failure without slowdown
+
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+
+ Scala flatMap example
+
+  val lines = sc.parallelize(List("hello world", "hi"))
+   val words = lines.flatMap(line => line.split(" "))
+   words.first() // returns "hello"
+
+
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~   WordCount Example.
+
+val lines = sc.textFile("/home/ubuntu/work/spark_notes.txt")
+val flatMapWords = lines.flatMap(line => line.split(" "))
+flatMapWords.collect()
+val wordwithOneNumber = flatMapWords.map(word => (word, 1))
+val count =wordwithOneNumber.reduceByKey((x, y) => x + y)
+count.collect()
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+count the each line
+
+val lines = sc.textFile("data.txt")
+val lineLengths = lines.map(s => s.length)
+val totalLength = lineLengths.reduce((a, b) => a + b)
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+val lines = sc.textFile("data.txt")
+val pairs = lines.map(s => (s, 1))
+val counts = pairs.reduceByKey((a, b) => a + b)
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Example Scala squaring the values in an RDD
+val input = sc.parallelize(List(1, 2, 3, 4))
+val result = input.map(x => x * x)
+println(result.collect().mkString(","))
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+ Scala reduce example
+val rdd = sc.parallelize(List(1,2,3,45,6,69))
+val sum = rdd.reduce((x, y) => x + y)
+sum.collect()
+sum.count()
+sum.take(3)
+sum.min()
+sum.max()
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~`
+
+
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+
+
+
+
+

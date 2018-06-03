@@ -1,0 +1,54 @@
+What transformations and actions would you use in each case? Complete the command with the appropriate transformations and actions.
+
+1.	How do you see the first element of the inputRDD? auctionRDD.____________________
+
+2.	What do you use to see the first 5 elements of the RDD? auctionRDD.____________________
+
+3.	What is the total number of bids?
+
+val totbids = auctionRDD.__________________________________________
+
+___________________________________________________________________
+
+4.	What is the total number of distinct items that were auctioned?
+
+val totitems = auctionRDD._________________________________________
+
+___________________________________________________________________
+
+5.	What is the total number of item types that were auctioned?
+
+val totitemtype = auctionRDD.______________________________________
+
+___________________________________________________________________
+
+6.	What is the total number of bids per item type?
+
+val bids_itemtype = auctionRDD.____________________________________
+
+___________________________________________________________________
+
+
+
+We want to calculate the max, min and average number of bids among all the auctioned items.
+
+7.	Create an RDD that contains total bids for each auction.
+
+val bidsAuctionRDD = auctionRDD.___________________________________
+
+___________________________________________________________________
+
+8.	Across all auctioned items, what is the maximum number of bids? (HINT: you can use Math.max – in which case import java.lang.Math at the command line)
+
+val maxbids = bidsItemRDD._________________________________________
+
+9.	Across all auctioned items, what is the minimum number of bids?
+
+val minbids = bidsItemRDD
+
+10.	What is the average number of bids?
+
+val avgbids = bidsItemRDD._________________________________________
+
+___________________________________________________________________
+

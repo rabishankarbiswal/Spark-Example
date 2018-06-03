@@ -1,0 +1,19 @@
+To load the file:
+
+auctionRDD=sc.textFile("/path/to/file/auctiondata.csv").map(lambd
+
+a line:line.split(","))
+
+1.	auctionRDD.first
+
+2.	auctionRDD.take(5)
+
+3.	totbids = auctionRDD.count() print totbids
+4.	totitems = auctionRDD.map(lambda line:line[aucid]).distinct().count() print totitems
+
+5.	totitemtypes = auctionsRDD.map(lambda line:line[itemtype]).distinct().count() print totitemtypes
+6.	bids_itemtype = auctionRDD.map(lambda x:(x[itemtype],1)).reduceByKey(lambda x,y:x+y).collect() print bids_itemtype
+7.	bids_auctionRDD = auctionRDD.map(lambda x:(x[aucid],1)).reduceByKey(lambda x,y:x+y) bids_auctionRDD.take(5) #just to see the first 5 elements
+8.	maxbids = bids_auctionRDD.map(lambda x:x[bid]).reduce(max) print maxbids
+9.	minbids = bids_auctionRDD.map(lambda x:x[bid]).reduce(min) print minbids
+10.	avgbids = totbids/totitems print avgbids

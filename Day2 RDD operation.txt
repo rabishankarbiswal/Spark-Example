@@ -1,0 +1,73 @@
+use parallelize method()
+
+val rdd = sc.parallelize(List(1,2,3,4))
+
+2.
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+val rdd1 = sc.textFile("path")
+
+If our files are small enough, then we can use the
+SparkContext.wholeTextFiles() method and get back a pair RDD where the key is
+the name of the input file.
+
+Saving text files
+
+saveAsFextFile("path")
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Transformation
+
+val input = sc.parallelize(List(1, 2, 3, 4))
+val result = input.map(x => x * x)
+println(result.collect().mkString(","))
+
+scala> val input = sc.parallelize(List(1, 2, 3, 4))
+input: org.apache.spark.rdd.RDD[Int] = ParallelCollectionRDD[0] at parallelize at <console>:24
+
+scala> val result = input.map(x => x * x)
+result: org.apache.spark.rdd.RDD[Int] = MapPartitionsRDD[1] at map at <console>:26
+
+scala> result.collect
+res0: Array[Int] = Array(1, 4, 9, 16)
+
+scala> println(result.collect()
+     | )
+[I@7f69e114
+
+scala> println(result.collect().mkString(","))
+1,4,9,16
+
+scala> result.collect().mkString(",")
+res3: String = 1,4,9,16
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Function name                          Example
+
+map()                                rdd.map(x => x + 1)
+
+
+flatmap()                             rdd.flatMap(x => x.to(3))
+
+filter()                              rdd.filter(x => x != 1)
+
+distinct()                             rdd.distinct()
+
+
+
+
+
+
+
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+deff b/w Map and FlatMap
+
+val lines = sc.parallelize(List("hello world", "hi"))
+val words = lines.flatMap(line => line.split(" "))
+words.first()
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+=>Saving to Cassandra in Scala
+
+val rdd = sc.parallelize(List(Seq("moremagic", 1)))
+rdd.saveToCassandra("test" , "kv", SomeColumns("key", "value"))

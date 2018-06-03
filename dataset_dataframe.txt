@@ -1,0 +1,40 @@
+DataFrames and Spark SQL. 
+These are high-level APIs for working with structured data 
+(e.g. database tables, JSON files), 
+which let Spark automatically optimize both storage and computation.
+
+
+Dataset==>Datasets, an extension of the DataFrame API that provides a type-safe,
+ object-oriented programming interface.
+
+Dataset==> They also allow direct operations over user-defined classes.
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+DataSet==>we expect Datasets to become a powerful way to write more
+efficient Spark applications. We have designed them to work alongside the
+existing RDD API,
+but improve efficiency when data can be represented in a structured form.
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Working with Datasets
+
+A Dataset is a strongly-typed, immutable collection of objects that are 
+mapped to a relational schema.  At the core of the Dataset API is a new 
+concept called an encoder, which is responsible for converting between JVM 
+objects and tabular representation. The tabular representation is stored using 
+Spark’s internal Tungsten binary format, allowing for operations on serialized 
+data and improved memory utilization.
+
+Encoder==>Encoders are highly optimized and use runtime code generation 
+to build custom bytecode for serialization and deserialization
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Users of RDDs will find the Dataset API quite familiar, as it provides many of 
+the same functional transformations (e.g. map, flatMap, filter).  Consider the 
+following code, which reads lines of a text file and splits them into words:
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+ 
+

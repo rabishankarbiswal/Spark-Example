@@ -1,0 +1,28 @@
+Step 1: Create a HBase table ‘customers’ with column_family ‘customers_data’ from HBase shell.
+
+# Enter into HBase shell
+
+[training@localhost ~]$ hbase shell
+# Create a table ‘customers’ with column family ‘customers_data’
+
+hbase(main):001:0> create 'customers', 'customers_data'
+# List the tables
+
+hbase(main):002:0> list
+# Exit from HBase shell
+
+hbase(main):003:0> exit
+Step 2: Write the following PIG script to load data into the ‘customers’ table in HBase
+
+-- Name your script Load_HBase_Customers.pig
+-- Load dataset 'customers' from HDFS location
+
+raw_data = LOAD 'hdfs:/user/training/customers' USING PigStorage(',') AS (
+           custno:chararray,
+           firstname:chararray,
+           lastname:chararray,
+           age:int,
+           profession:chararray
+);
+
+

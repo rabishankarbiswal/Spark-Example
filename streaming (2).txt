@@ -1,0 +1,40 @@
+import org.apache.spark._
+import org.apache.spark.streaming._
+import org.apache.spark.streaming.StreamingContext._
+object assignment3
+{
+def main(args: Array[String]) {
+if (args.length < 2) {
+System.err.println("Usage: Filter a word in the streaming data")
+System.exit(1)
+}
+val sparkConf= new SparkConf().setAppName("Streaming example")
+val ssc = new StreamingContext(sparkConf, Seconds(1))
+val lines = ssc.socketTextStream("localhost", 9999)
+val filtered_data = lines.filter(line => line.contains("fatal"))
+filtered_data.length
+ssc.start()
+ssc.awaitTermination()
+}
+}
+
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+import org.apache.spark.SparkContext 
+import org.apache.spark.SparkContext._ 
+import org.apache.spark._  
+
+object SparkWordCount { 
+   def main(args: Array[String]) { 
+
+      val sc = new SparkContext( "local", "Word Count", "/home/ubuntu/Ankit1", Nil, Map(), Map()) 
+		
+      val input = sc.textFile("/home/ubuntu/Ankit.txt") 
+		
+      valcount = input.flatMap(line ? line.split(" ")) 
+      .map(word ? (word, 1)) 
+      .reduceByKey(_ + _)  
+      count.saveAsTextFile("outfile") 
+      System.out.println("OK"); 
+   } 
+} 

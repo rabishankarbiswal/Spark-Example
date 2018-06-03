@@ -1,0 +1,95 @@
+scala> 1 + 2
+res0: Int = 3
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+scala> res0 * 3
+res1: Int = 9
+~~~~~~~~~~~~~~~~~~~~~
+scala> println("Hello, world!")
+Hello, world!
+
+The println function prints the passed string to the standard output, similar
+to System.out.println in Java.
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  Define some variables
+
+scala> val msg = "Hello, world!"
+msg: java.lang.String = Hello, world!
+
+java.lang.String, because Scala strings are implemented
+by Java’s String class.
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+scala> val msg2: java.lang.String = "Hello again, world!"
+msg2: java.lang.String = Hello again, world!
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Going back to the original msg
+
+scala> println(msg)
+Hello, world!
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+What you can’t do with msg, given that it is a val
+
+scala> msg = "Goodbye cruel world!"
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~`
+you’ll need to use a var
+
+scala> var greeting = "Hello, world!"
+greeting: java.lang.String = Hello, world!
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~`
+scala> greeting = "Leave me alone, world!"
+greeting: java.lang.String = Leave me alone, world!
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Define some functions
+
+scala> def max(x: Int, y: Int): Int = {
+| if (x > y)
+| x
+| else
+| y
+| }
+max: (Int,Int)Int
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+scala> def max2(x: Int, y: Int) = if (x > y) x else y
+max2: (Int,Int)Int
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~
+Once you have defined a function, you can call it by name
+
+scala> max(3, 5)
+res6: Int = 5
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Here’s the definition of a function that takes no parameters and returns no
+usable result:
+
+scala> def greet() = println("Hello, world!")
+greet: ()Unit
+
+define the greet() function
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+scala> greet()
+Hello, world!
+scala> greet // This is bad style
+Hello, world!
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Some List methods and usages.
+
+What it is                                    What it does
+
+List()                                        Creates an empty List
+
+
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+val pair = (99, "Luftballons")
+println(pair._1)
+println(pair._2)
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

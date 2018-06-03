@@ -1,0 +1,42 @@
+import org.apache.spark.SparkContext
+import org.apache.spark.SparkContext._
+import org.apache.spark.SparkConf
+import org.apache.spark.graphx._
+import org.apache.spark.rdd.RDD
+
+object creditFraud {
+
+def main(args: Array[String]) {
+
+ val conf = new SparkConf().setAppName("Transaction")
+ val sc = new SparkContext(conf)
+
+ val graph = GraphLoader.edgeListFile(sc,"Users/grantherman/Desktop/transactionFile.csv")
+
+
+println("GRAPHX: Number of vertices " + graph.vertices.count)
+println("GRAPHX: Number of edges " + graph.edges.count)
+    }
+  }
+
+
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Here is the .sbt file:
+
+
+name := "Transaction"
+
+version := "1.0"
+
+scalaVersion := "2.10.4"
+
+libraryDependencies += "org.apache.spark" %% "spark-core" % "1.3.1" % "provided"
+
+libraryDependencies += "org.apache.spark" %% "spark-graphx" % "1.3.1" % "provided"
+
+
+resolvers ++= Seq(
+"Akka Repository" at "http://repo.akka.io/releases/",
+"Spray Repository" at "http://repo.spray.cc/")

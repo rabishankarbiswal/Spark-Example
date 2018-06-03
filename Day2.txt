@@ -1,0 +1,182 @@
+Spark SQL is a Spark module for structured data processing. Unlike the basic Spark RDD API, the interfaces provided by Spark SQL provide Spark with more information about the structure of both the data and the computation being performed. Internally, Spark SQL uses this extra information to perform extra optimizations. 
+
+
+DataFrames
+
+A DataFrame is a distributed collection of data organized into named columns. It is conceptually equivalent to a table in a relational database or a data frame in R/Python, but with richer optimizations under the hood. DataFrames can be constructed from a wide array of sources such as: structured data files, tables in Hive, external databases, or existing RDDs.
+
+The DataFrame API is available in Scala, Java, Python, and R.
+
+
+
+SQLContext
+
+The entry point into all functionality in Spark SQL is the SQLContext class.
+
+
+val sqlContext = new org.apache.spark.sql.SQLContext(sc)
+// this is used to implicitly convert an RDD to a DataFrame.
+import sqlContext.implicits._
+
+
+Creating DataFrames
+With a SQLContext, applications can create DataFrames from an existing RDD, from a Hive table, or from data sources.
+
+val sqlContext = new org.apache.spark.sql.SQLContext(sc)
+val df = sqlContext.read.json("/home/ubuntu/hello.json")
+df.show()
+
+DataFrame Operations
+
+val sqlContext = new org.apache.spark.sql.SQLContext(sc)
+val df = sqlContext.read.json("examples/src/main/resources/people.json")
+df.show()
+df.printSchema()
+df.select("name").show()
+df.select(df("name"), df("age") + 1).show()
+df.filter(df("age") > 21).show()
+df.groupBy("age").count().show()
+
+API document for details.
+
+val sqlContext = new org.apache.spark.sql.SQLContext(sc)
+import sqlContext.implicits._
+case class emp(name: String, age: Int)
+
+val df1 = sc.textFile("/home/ubuntu/ram.txt").map(_.split(",")).map(p => Person(p(0), p(1).trim.toInt)).toDF()
+df1.registerTempTable("Person")
+val teenagers =sqlContext.sql("SELECT name, age FROM emp WHERE age >= 13 AND age <= 19")
+teenagers.collect()
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   create Dataset
+
+//create a Dataset using spark.range starting from 5 to 100, with increments of 5
+val numDS = spark.range(5, 100, 5)
+// reverse the order and display first 5 items
+numDS.orderBy(desc("id")).show(5)
+numDS.orderBy(asc("id")).show(5)
+//compute descriptive stats and display them
+numDS.describe().show()
+
+stddev means =>The average of the squared differences from the Mean
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     Create Dataframe
+
+// create a DataFrame using spark.createDataFrame from a List or Seq
+val langPercentDF = spark.createDataFrame(List(("Scala", 35), ("Python", 30), ("R", 15), ("Java", 20)))
+//rename the columns
+val lpDF = langPercentDF.withColumnRenamed("_1", "language").withColumnRenamed("_2", "percent")
+//order the DataFrame in descending order of percentage
+
+ Add the Column
+
+ val df = lpDF.withColumn("rall no", lpDF("language") + 1)
+
+val df1 = lpDF.withColumn("rall no", lpDF("percent") + 5)
+
+df.withColumn("newName",lit("newValue"))
+
+lpDF.orderBy(desc("percent")).show(false)
+
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+ Create DataSets
+case class UserAccount (user_id: String, balance: Double, first: String, last: String, city: String, state: String)
+
+val caseClassDS = Seq(UserAccount("hero", 45.3, "Bablu", "Kumar", "Bangalore", "Karnataka")).toDS()
+
+caseClassDS.show()
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Creating Datasets
+
+case class Person(name: String, age: Long)
+
+val caseClassDS = Seq(Person("bablu", 24)).toDS()
+caseClassDS.show()
+
+val primitiveDS = Seq(1, 2, 3).toDS()
+primitiveDS.map(_ + 1).collect()
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Reading JSON Data with SparkSession API
+
+// read the json file and create the dataframe
+
+val zipsDF = spark.read.json("/home/ubuntu/hello.json")
+
+//filter all cities whose population > 40K
+zipsDF.filter(zipsDF.col("roll") > 300).show(10)
+
+
+
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Using Spark SQL with SparkSession
+
+// Now create an SQL table and issue SQL queries against it without
+// using the sqlContext but through the SparkSession object.
+// Creates a temporary view of the DataFrame
+zipsDF.createOrReplaceTempView("zips_table")
+zipsDF.cache()
+val resultsDF = spark.sql("SELECT age, name, roll, name FROM zips_table")
+resultsDF.show(10)
+
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Saving and Reading from Hive table with SparkSession
+
+//drop the table if exists to get around existing table error
+spark.sql("DROP TABLE IF EXISTS zips_hive_table")
+
+//save as a hive table
+spark.table("zips_table").write.saveAsTable("zips_hive_table")
+
+//make a similar query against the hive table 
+val resultsHiveDF = spark.sql("SELECT city, pop, state, zip FROM zips_hive_table WHERE pop > 40000")
+resultsHiveDF.show(10)
+
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+// DataFrames can be converted to a Dataset by providing a class. Mapping will be done by name
+val path = "/home/ubuntu/hello.json"
+val peopleDS = spark.read.json(path).as[Person]
+peopleDS.show()
+
+
+
+
+Assingment:
+print only name from teenagers people table .
+
+Parquet Files:
+
+Parquet is a columnar format that is supported by many other data processing systems. Spark SQL provides support for both reading and writing Parquet files that automatically preserves the schema of the original data. When writing Parquet files, all columns are automatically converted to be nullable for compatibility reasons.
+
+val sqlContext = new org.apache.spark.sql.SQLContext(sc)
+// this is used to implicitly convert an RDD to a DataFrame.
+import sqlContext.implicits._
+
+case class Person(name: String, age: Int)
+
+// Create an RDD of Person objects and register it as a table.
+val people = sc.textFile("/home/ubuntu/ram.txt").map(_.split(",")).map(p => Person(p(0), p(1).trim.toInt)).toDF()
+people.registerTempTable("people")
+
+people.write.parquet("people.parquet")
+
+val parquetFile = sqlContext.read.parquet("people.parquet")
+
+parquetFile.registerTempTable("parquetFile")
+val teenagers = sqlContext.sql("SELECT name FROM parquetFile WHERE age >= 13 AND age <= 19")
+teenagers.collect()
+
+
+1)Join two tables
+2)Write table to disk
+3)write single file to disk
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

@@ -1,0 +1,87 @@
+DStreams:-
+
+Spark Streaming provides an
+abstraction called DStreams, or discretized streams. A DStream is a sequence of data
+arriving over time. Internally, each DStream is represented as a sequence of RDDs
+arriving at each time step (hence the name “discretized”).
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+A Simple Example
+
+Maven coordinates for Spark Streaming
+
+groupId = org.apache.spark
+artifactId = spark-streaming_2.10
+version = 1.2.0
+
+Scala streaming imports
+
+import org.apache.spark.streaming.StreamingContext
+import org.apache.spark.streaming.StreamingContext._
+import org.apache.spark.streaming.dstream.DStream
+import org.apache.spark.streaming.Duration
+import org.apache.spark.streaming.Seconds
+
+Streaming filter for printing lines containing “error” in Scala
+
+// Create a StreamingContext with a 1-second batch size from a SparkConf
+val ssc = new StreamingContext(conf, Seconds(1))
+// Create a DStream using data received after connecting to port 7777 on the
+// local machine
+val lines = ssc.socketTextStream("localhost", 7777)
+// Filter our DStream for lines with "error"
+val errorLines = lines.filter(_.contains("error"))
+// Print out the lines with errors
+errorLines.print()
+
+Streaming filter for printing lines containing “error” in Scala
+
+// Start our streaming context and wait for it to "finish"
+ssc.start()
+// Wait for the job to finish
+ssc.awaitTermination()
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~`
+$ nc localhost 7777 # Lets you type input lines to send to the server
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Architecture and Abstraction
+
+the streaming computation
+is treated as a continuous series of batch computations on small batches of data.
+Spark Streaming receives data from various input sources and groups it into small
+batches. New batches are created at regular time intervals.
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+The
+size of the time intervals is determined by a parameter called the batch interval. The
+batch interval is typically between 500 milliseconds and several seconds, as configured
+by the application developer. Each input batch forms an RDD, and is processed
+using Spark jobs to create other RDDs.
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+DStreams support output operations, such as the
+print() used in our example. Output operations are similar to RDD actions in that
+they write data to an external system, but in Spark Streaming they run periodically on
+each time step, producing output in batches.
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+For each input source, Spark Streaming launches receivers, which are tasks
+running within the application’s executors that collect data from the input source and
+save it as RDDs
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Transformations on DStreams can be grouped into either stateless or stateful
+
+In stateless transformations the processing of each batch does not depend on the
+data of its previous batches.
+
+
+Stateful transformations, in contrast, use data or intermediate results from previous
+batches to compute the results of the current batch.
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

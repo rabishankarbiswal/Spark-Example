@@ -1,0 +1,70 @@
+Solutions
+
+
+Lab 2.1.3 – Scala
+
+
+Note: Solutions are also in the file Lab2_1.txt from which you can copy and paste into the Interactive shell.
+
+1.	auctionRDD.first
+
+2.	auctionRDD.take(5)
+
+3.	val totbids = auctionRDD.count()
+
+4.	val totitems = auctionRDD.map(_(aucid)).distinct.count()
+
+5.	val itemtypes = auctionRDD.map(_(itemtype)).distinct.count()
+
+6.	val bids_itemtype = auctionRDD
+
+.map(x=>(x(itemtype),1)).reduceByKey((x,y)=>x+y).collect()
+
+7.	val bids_auctionRDD = auctionRDD
+
+.map(x=>(x(aucid),1)).reduceByKey((x,y)=>x+y)
+
+8.	val maxbids = bids_auctionRDD
+
+.map(x=>x._2).reduce((x,y)=>Math.max(x,y))
+
+9.	val minbids = bids_auctionRDD.map(x=>x._2)
+
+.reduce((x,y)=>Math.min(x,y))
+
+10.	val avgbids = totbids/totitems
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~`
+
+import org.apache.spark.SparkContext
+import org.apache.spark.SparkContext._
+import org.apache.spark.SparkConf
+
+object AuctionsApp {
+  def main(args: Array[String]): Unit = {
+    val conf = new SparkConf().setMaster("local").setAppName("AuctionsApp")
+    val sc = new SparkContext(conf)
+    val data = sc.textFile("D:\\evarcity_spark\\Module2\\Assnment\\assnmt2\\ebey.csv.txt",20)
+    val auctionRDD= data.flatMap(_.split(" "))
+    val auctionid = 0
+    val bid = 1
+    val bidtime = 2
+    val bidder = 3
+    val bidderrate = 4
+    val openbid = 5
+    val price = 6
+    val itemtype = 7
+    val daystolive = 8
+    val totalbids=auctionRDD.count()
+    val totalitems=auctionRDD.map(line=>line(auctionid)).distinct().count()
+    val bids_auctionRDD=auctionRDD.map(line=>(line(auctionid),1)).reduceByKey((x,y)=> x+y)
+    val maxbids=bids_auctionRDD.map(x=>x._2).reduce((x,y)=>Math.max(x,y))
+    val minbids=bids_auctionRDD.map(x=>x._2).reduce((x,y)=>Math.min(x,y))
+    val avgbids=totalbids/totalitems
+    println("total bids across all auctions:" + totalbids)
+      println("total number of distinct items: %s".format(totalitems))
+      println("Max bids across all auctions: %s ".format(maxbids))
+      println("Min bids across all auctions: %s ".format(minbids))
+      println("Avg bids across all auctions: %s ".format(avgbids))
+  }
+}

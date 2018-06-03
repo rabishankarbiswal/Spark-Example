@@ -1,0 +1,7 @@
+"name":Utkarsh,"Mob":1238,"course":spark,"mode":online
+"name":somu,"Mob":1253,"course":Hadoop,"mode":classroom
+"name":evarcity,"Mob":1423,"course":scala,"mode":online
+"name":India,"Mob":1236,"course":python,"mode":classroom
+"name":mumbai,"Mob":1253,"course":spark,"mode":online
+"name":Utkarsh,"Mob":1523,"course":Mnlib,"mode":online
+"name":Bangalore,"Mob":512,"course":spark,"mode":offline

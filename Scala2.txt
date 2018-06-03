@@ -1,0 +1,308 @@
+                  Control Structures in Scala
+--->If-else syntex in scala is same as java or C++
+
+----->In Scala, if-else has a value, of the expression following it
+
+-----> Semicolons are optional in scala
+
+scala> var x =8
+x:Int = 8
+
+scala> val p =if(x > 0 && x< 6) 1 else 0
+p: Int = 1
+
+scala> val s = if (x > 0 && x< 6) "evarcity" else 0
+s:Any = Prwatech
+
+---> Every expression in scala has a type
+
+---> First If Statement has a type Int
+
+---> Second statement has a type Any. Type of a mixed expression 
+      is supertype of both branches
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  Scala: While Loop
+
+--->In scala while and Do-while loops are same as java
+
+      var args1 = "600"
+       var a = 0
+       while (a < args1.length)
+       {
+        println(args1(a))
+        a += 1
+         }
+       
+ ---> The ++i, operetion don't work in scala
+ 
+---> You'll have to use i+ =1 or i =i+1 expression instead
+ 
+        scala> while ( i < args.length)
+        {
+        println(args(i))
+        i++
+         }
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+       Scala: Foreach loop
+
+  ---> Looping with foreach:
+
+         var args = "Hello"
+         args.foreach(arg => println(arg))
+         args.foreach(println)
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   Scala: For Loop
+     --->For Loop:
+    
+          ---> scala doesn't have for (initialize; test; update) syntax
+         -----> Either you'll use a while loop or a statement like below
+
+                   for(i<-1 to 5)
+                   println(i)
+
+//for(i<-1 to 5; x=i%6)println(x)
+
+scala> for(i<-1 to 5; x=5-i)println(x) 
+4
+3
+2
+1
+0
+
+scala> for(i<-2 to 5; x=6-i)println(x) //for(i<-1 to 5; x=6-i%6)println(x)
+4
+3
+2
+1
+ 
+  
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   Scala: For Loop 
+
+---> while traversing an array, following could be applied:
+   
+        val in = "Hello Evarcity"
+        var sum = 0
+        for(i<-0 until in.length) sum +=i
+         print(sum)
+ 
+       ---> Advanced for Loop:
+       ===> we can have multiple generators in for loop
+          for(i<-1 to 3; j<-1 to 3)
+          println(10*i + j)
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   Scala: For Loop
+ ===> we can conditions in multi generators for loop
+    for(i<-1 to 3; j<-1 to 3 if i ==j) println(10*i + j)
+ ===> we can introduce variables in loop!!!
+
+      for(i<-1 to 3; x = 4-i; j<- x to 3) println(10*i + j)
+    ===> if the body of for loop starts with yield, it returns a collection of values
+       
+        val x = for(i<-1 to 20) yield i*2.5
+          for(i<-x) println(i)
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+for {
+  i <- 0 to 10
+  if i % 2 == 0
+} println(i)
+0
+2
+4
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+for { 
+  i <- 0 to 10
+  if i % 2 == 0
+  if i > 5
+} println(i)
+6
+8
+10
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+for (i <- 1 to 5) yield i
+res0: scala.collection.immutable.IndexedSeq[Int] = Vector(1, 2, 3, 4, 5)
+
+where Yield is a keyword in for loop
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+scala> for (i <- 1 to 5) yield i * 2
+res1: scala.collection.immutable.IndexedSeq[Int] = Vector(2, 4, 6, 8, 10)
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+scala> for (i <- 10 until (0, -2))
+     |     yield i
+res1: scala.collection.immutable.IndexedSeq[Int] = Vector(10, 8, 6, 4, 2)
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+for (i <- 1 to 10 if i % 2 == 0)
+    yield i
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+scala> for (i <- 1 to 5) yield i % 2
+res2: scala.collection.immutable.IndexedSeq[Int] = Vector(1, 0, 1, 0, 1)
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+           ==========> SCALA:FUNCTIONS <===========
+   ---> In addition to methods, scala has the concept of functions
+  ===>Methods are always invoked on objects, but functions are NOT
+ ====> In java, this concept is very close to a static method
+ -------> Example:
+
+     def area(radius:Int): Double = {3.14*radius*radius}
+     area(5)
+  ---> There is no need of a return statement in Scala functions
+   ---> We need to specify the datatype for a recursive function:
+   
+  Exp:
+    def factorial(n:Int):Int = if(n==0) 1 else n*factorial(n-1)
+      factorial(6)
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  ====> Arguments to Functions
+
+---> Named and Default Arguments
+  --> We can provide defaults to function arguments, which will be used in case no value is provided in function call
+Wrong
+    def concatStr(arg1:String="hi",arg2:String="Utkarsh",arg3:String="Evarcity") 
+    concatStr("hi!")
+
+  >>we can specify argument names in function calls
+  >> in named invocations the order of arguments is not necessary
+  >> We can mix unnamed and named arguments, if the unnamed argument is the first one 
+
+          >>>>Variable Arguments
+   >>Scala supports variable number of arguments to a function
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+ Scala: Procedures
+---> Scala has special functions which don't return any value
+---> If there is a scala function without a preceding "=" symbol, then
+       the return type of the function is Unit
+ ---> Such functions are called Procedures
+--> procedures do not return any value in scala
+ 
+example:
+ def rect_area(length:Float, breadth:Float) {val area = length*breadth; println(area)}
+ --> same rules of default and named arguments apply on Procedures as well
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+ Scala: Collections
+
+--->Scala has a rich library of collections, they are:
+===>Array
+===>ArrayBuffers
+===>Maps
+===>Tuples
+===>Lists
+        
+   Scala Collections:Array
+  --->Fixed Length Arrays:
+example:
+  val n = new Array[Int](10)
+   val st = new Array[String](10)
+   val st = Array("Hello", "Utkarsh","s","s","t","u","v","w","x","y","14","a","b","c","d","e")
+
+ (val st1 = Array("Hello", "Utkarsh","s","s","t","u","v","w","x","y","z","a","b","c","d","e",)
+) [no need to define range for sfecific  val st1 = new Array[String](10 ]
+
+  Scala Collections:ArrayBuffer
+ --->variable Length Array(Array Buffers)
+ --->similar to java ArrayLists
+
+   import scala.collection.mutable.ArrayBuffer
+   val a = ArrayBuffer[Int]()
+   a+=1
+    a+=(2,3,5)
+    a++=Array(6,7,8)
+     a++=Array(9)
+     a++=(10)                  (wrong statement)
+     a+=(100)                    (right statement)
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+ Scala Collections: Array and ArrayBuffers
+
+--> Common operations:
+
+       a.trimEnd(2)                     //Removes last 2 elements
+       a.insert(2,6)                     //Adds element at 2nd index
+        a.insert(2,10,11,12)            //Adds a list
+        a.remove(2)                //Removes an element
+        a.remove(2,3)         //Removes three elements from index 2
+  
+* ---> Traversing and Tranformation:
+ 
+      for(el<-a)
+          println(el)
+       for(el <-a if el%2 == 0) yield(2*el)
+
+A custom el resolver which needs to do following things. * call the getters and setters of scala
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  Scala Collection: Array and arrayBuffers
+  --->Common Operations:
+
+          Array(1,2,3,4).sum
+           Array(1,5,9,8).max
+            val a =Array(1,7,2,9)
+           scala.util.Sorting.quickSort(a)
+               a.mkString(" ** ")
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+ Scala Collection: Maps
+
+--->In Scala, map is a collection of pair
+---->A pair is a group of two values(Not necessarily of same type)
+
+        val mapping = Map("Evar" -> "utkarsh","Vinay" -> "city")
+        val mapping = scala.collection.mutable.Map("Vishal" -> "K","Vijay" -> "v")
+         val x = mapping("Vishal")
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+ Scala Collections:Map(contd.)
+ ---> Accessing Maps:
+  val mapping = Map("Prwa" -> "utkarsh","Vinay" -> "Verma")
+        val mapping = scala.collection.mutable.Map("Vishal" -> "K","Vijay" -> "v")
+         val x = mapping("Vishal")
+--->Iterating Maps:
+  for((k,v) <- mapping) yield(v,k)
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Scala collections: Tuples
+
+--->Tuple is more generalized form of pair
+--->Tuple has more than two values of potentially different types
+
+      val a = (1,4,"Hero","Zero")
+      
+ ---->accessing the tuple elements:
+    a._2,_3 or a _2//Returns 4
+ 
+--->In tuples the offset starts with 1 and NOT from 0
+--->Tuples are typically used for the functions which return more than one value:
+    "New Delhi India".partition(_.isUpper)
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+ Scala Collections: Lists
+ 
+---->List is either Nil or a combination of head and tail elements where tail is again a List
+
+  ---> example:
+scala> val lst = List(1,2)
+lst: List[Int] = List(1, 2)
+
+scala> lst.head
+res23: Int = 1
+
+scala> lst.tail
+res24: List[Int] = List(2)
+
+ 
+--->::operator adds a new List from given head and tail
+
+       
+scala> 2::List(4,5)
+res28: List[Int] = List(2, 4, 5)
+
+[adding new value in lst] or exisisting list
+
+   9::lst
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+ Scala Collections: Lists(Contd.)
+
+----> we can use iterator to iterate over a list, but recursion is a preferred practice in scala
+
+ example:
+              def sum(l :List[Int]):Int = {if(l == Nil) 0 else l.head + sum(l.tail)}
+                val y = sum(lst)
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

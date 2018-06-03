@@ -1,0 +1,45 @@
+Variables (Vals)
+
+object Scratchpad {
+
+def main(args: Array[String]): Unit = {
+
+// Tutorial: A 'val' is an immutable variable, it cannot be changed.
+
+val Pi = 3.14 // <-- Pi cannot be changed
+
+//	We will calculate the area of a circle with radius = 2cm
+
+//	TASK[1/2]: create a val, 'radius', type Double, with value 2: val radius :Double =2
+
+//	TASK[2/2]: create a val, 'area', type Double, with the area of the circle.
+
+//	(Area of the circle = Pi*radius*radius)
+
+val area : Double =Pi*radius*radius
+
+println("Area of the circle is: " + area) ensure(radius == 2)
+
+ensure(area == 12.56)
+
+}
+
+def ensure(b: Boolean, mesg: String = "Solution isn't totally correct.") = if(!b) throw new Exception(mesg)
+
+}
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Lazy val
+
+object Scratchpad {
+
+lazy val value1 = {println("Accessing value 1"); 11} lazy val value2 = {println("Accessing value 2"); 22}
+
+println("First time:") println(value2) println(value1)
+
+println("Second time:") println(value2) println(value1)
+
+def main(args: Array[String]): Unit = { }
+
+def ensure(b: Boolean, mesg: String = "Solution isn't totally correct.") = if(!b) throw new Exception(mesg)
+
+}

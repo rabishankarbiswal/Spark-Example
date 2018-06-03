@@ -1,0 +1,70 @@
+step1
+
+sudo apt-get update
+
+step2
+
+sudo apt-get install openjdk-8-jdk
+
+step3
+
+install scala
+
+wget http://downloads.lightbend.com/scala/2.11.4/scala-2.11.4.tgz
+
+step4
+
+tar -xvf scala-2.11.4
+
+step5
+
+sudo mkdir /usr/local/scala
+
+sudo mv scala-2.11.4 /usr/local/scala
+
+step6
+
+set the path
+
+vi ~/.bashrc
+
+export SCALA_HOME=/usr/local/scala/scala-2.11.4 
+export PATH=$SCALA_HOME/bin:$PATH
+
+step7
+
+source ~/.bashrc
+
+than
+
+sudo apt-get install git
+
+step7
+
+ wget http://d3kbcqa49mib13.cloudfront.net/spark-2.2.0-bin-hadoop2.6.tgz
+
+step 8
+
+tar -xvf spark-2.1.0-bin-hadoop2.6.tgz
+
+sudo mv spark-2.1.0-bin-hadoop2.6 /usr/local/scala
+
+step 9
+vi ~/.bashrc
+
+export SPARK_HOME=/usr/local/scala/spark-2.2.0-bin-hadoop2.6 
+export PATH=$SPARK_HOME/bin:$PATH
+
+step 10
+
+source ~/.bashrc
+
+step11
+
+spark-shell
+
+
+
+
+
+diamondsDF <- read.df("/home/ubuntu/ebey.csv.txt",source = "csv", header="true", inferSchema = "true")

@@ -1,0 +1,66 @@
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~`
+step1
+echo "deb https://dl.bintray.com/sbt/debian /" | sudo tee -a /etc/apt/sources.list.d/sbt.list
+step2
+sudo apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv 642AC823
+step3
+sudo apt-get update
+step4
+sudo apt-get install sbt
+
+step5
+sbt -version
+
+step6
+Make a plugin directory inside .sbt/0.13/
+
+mkdir -p .sbt/0.13/plugins
+
+step7
+
+Create a file plugins.sbt
+
+vim .sbt/0.13/plugins/plugins.sbt
+
+step8
+
+addSbtPlugin("com.typesafe.sbteclipse" % "sbteclipse-plugin" % "4.0.0")
+
+step9
+sbt package
+
+mkdir helloworld
+
+cd helloworld/
+
+mkdir -p src/main/scala
+
+sudo gedit src/main/scala/hello.scala
+
+step10
+
+Put the below code.
+
+package foo.bar.baz
+object Main extends App {
+println("Hello, world")
+}
+
+
+
+Create a build.sbt file inside the helloworld directory.
+
+sudo gedit build.sbt
+
+name := "NetworkWordCount"
+version := "1.0"
+scalaVersion := "2.11.4"
+
+
+
+$ sbt compile
+
+$sbt run
+
+sbt package

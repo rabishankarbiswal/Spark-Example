@@ -1,0 +1,98 @@
+Please edit the below parameters in hbase-site.xml file to run HBASE on top of HDFS.
+
+hbase-site.xml
+
+<configuration>
+<property>
+<name>hbase.rootdir</name>
+<value>hdfs://localhost:8020/hbase</value>
+</property>
+
+<property>
+<name>hbase.zookeeper.quorum</name>
+<value>localhost</value>
+</property>
+
+<property>
+<name>hbase.zookeeper.property.clientPort</name>
+<value>2182</value>
+</property>
+
+<property>
+<name>hbase.zookeeper.property.dataDir</name>
+<value>/var/lib/hbase/zookeeper</value>
+</property>
+
+</configuration>
+
+
+How to start the hbase shell in cloudera
+
+sudo su
+cd /usr/lib/hbase
+bin/start-hbase.sh
+open a new terminal and give
+hbase shell
+list - to check if the hbase is working fine.
+
+commands:
+
+version - to find the version of hbase installed
+
+
+Example:
+
+create  'details', 'user', 'product'
+
+describe 'details'
+
+
+list
+
+put 'details', 'row1', 'user:name', 'abhishek'
+
+put 'details', 'row1', 'user:id', '001'
+
+put 'details', 'row1', 'user:number', '9090909090'
+
+scan 'details'
+
+put 'details', 'row2', 'product:name', 'product1'
+
+put 'details', 'row2', 'product:id' ,'001'
+
+get 'details', 'row1'   - we use get command with the help of row keys.
+
+
+scan 'details'
+
+delete 'details', 'row1', 'user:number'
+
+scan 'details'
+
+
+
+create 'details', 'customer', 'order'
+
+put 'details', 'row1', 'customer:name', 'abhishek'
+put 'details', 'row1', 'customer:number', '1'
+put 'details', 'row1', 'customer:address', 'bangalore'
+put 'details', 'row1', 'customer:phone number', '9090909090'
+
+put 'details', 'row1', 'order:number', '1'
+put 'details', 'row1', 'order:ordernumber', '000001'
+put 'details', 'row1', 'order:salesdate', 'bangalore'
+put 'details', 'row1', 'order:shippinglocation', 'chennai'
+
+
+scan 'details' , {COLUMNS => ['customer:number','order:ordernumber']}
+
+scan 'details' , {COLUMNS => ['customer:name','order:shippinglocation']}
+
+
+get 'details','row1'
+
+create 'myLittleHBaseTable', 'myLittleFamily' we need to create table for HBaseConnector.java file before running the program.
+
+
+

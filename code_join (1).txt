@@ -1,0 +1,10 @@
+case class emp(name:String,Lastname:String)
+case class emp_detail(city:String,country:String)
+val empRDD = sc.textFile("file:///home/evarcity/Desktop//fl").map(_.split(",")).map(x=>emp(x(0),x(1))).toDF
+val empDataRDD = sc.textFile("file:///home/evarcity/Desktop/fl1").map(_.split(",")).map(x=>emp_detail(x(0),x(1))).toDF
+empRDD.registerTempTable("emp")
+ empDataRDD.registerTempTable("emp_detail")
+val a= sqlContext.sql("select * from emp")
+a.show()
+val join= sqlContext.sql("SELECT * FROM emp INNER JOIN emp_detail")
+join.show()

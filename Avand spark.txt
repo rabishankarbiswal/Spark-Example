@@ -1,0 +1,24 @@
+1. Task failed due to some exception in code.
+ Spark will try 4 times(default number of tries).
+If task fail every time it will give an exception.
+If by chance it succeeds then Spark will continue and just update the accumulator value for successful state 
+and failed states accumulator values are ignored.
+
+2. Stage Failure : If an executor node crashes, no fault of user but an hardware
+ failure - And if the node goes down in shuffle stage.As shuffle output is stored locally,
+ if a node goes down, that shuffle output is gone.So Spark goes back to the stage that generated the shuffle output,
+ looks at which tasks need to be rerun, and executes them on one of the nodes that is still alive.
+After we regenerate the missing shuffle output, the stage which generated
+ the map output has executed some of it’s tasks multiple times.
+Spark counts accumulator updates from all of them.
+
+3. If a task is running slow then, Spark can launch a speculative copy of that task on another node.
+
+4. RDD which is cached is huge and can't reside in Memory.
+So whenever the RDD is used it will re run the Map operation to get the RDD and again accumulator will be updated by it.
+
+
+So it may happen same function may run multiple time on same data.
+So Spark does not provide any guarantee for accumulator getting updated because of the Map operation.
+
+So it is better to use Accumulator in Action operation in Spark.

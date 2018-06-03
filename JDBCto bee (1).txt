@@ -1,0 +1,33 @@
+./sbin/start-thriftserver.sh
+
+./bin/beeline
+
+beeline> !connect jdbc:hive2://localhost:10000
+
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+
+ spark to Hbase
+
+HBASE_PATH='/usr/local/hbase classpath'
+
+ spark-shell --driver-class-path $HBASE_PATH
+
+https://acadgild.com/blog/spark-on-hbase/
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Accessing Catalog Metadata
+
+In this snippet, we access table names and list of databases.
+
+//fetch metadata data from the catalog
+spark.catalog.listDatabases.show(false)
+spark.catalog.listTables.show(false)
+
+spark.catalog.listTables("default").show()
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+ 

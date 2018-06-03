@@ -1,0 +1,65 @@
+
+Loading the SFPD data into Spark dataframes using a csv parsing library
+
+
+Using Spark DataFrames, we will explore the SFPD data with questions like:
+
+What are the top 10 Resolutions?
+How many Categories are there?
+What are the top 10 incident Categories?
+
+
+import sqlContext.implicits._
+import org.apache.spark.sql._
+
+//  Return the dataset specified by data source as a DataFrame, use the header for column names
+val df = sqlContext.load("com.databricks.spark.csv", Map("path" -> "sfpd.csv", "header" -> "true"))
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+// Return the first n rows in the DataFrame
+df.take(1)
+
+// Print the schema to the console in a tree format
+df.printSchema()
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+/ display dataframe in a tabular format
+df.show()
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+// how many categories are there?
+df.select("Category").distinct.count
+// res5: Long = 39
+// register as a temp table inorder to use sql 
+df.registerTempTable("sfpd")
+
+// How many categories are there
+sqlContext.sql("SELECT distinct Category FROM sfpd").collect().foreach(println)
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+// What are the top 10 Resolutions ?
+sqlContext.sql("SELECT Resolution , count(Resolution) as rescount FROM sfpd group by Resolution order by rescount desc limit 10").collect().foreach(println)
+// [NONE,1063775]
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+// What are the top 10 most incident Categories?
+val t =  sqlContext.sql("SELECT Category , count(Category) as catcount FROM sfpd group by Category order by catcount desc limit 10")
+
+t.show()
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~`
+
+// The results of SQL queries are DataFrames and support RDD operations.
+// The columns of a row in the result can be accessed by ordinal
+t.map(t => "column 0: " + t(0)).collect().foreach(println)
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+//  Prints the physical plan to the console for debugging purpose
+auction.select("auctionid").distinct.explain()
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~``

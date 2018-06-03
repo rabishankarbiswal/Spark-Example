@@ -1,0 +1,423 @@
+                                 Objectives
+                 At the end of this Module, You will be able To:
+
+--->Implement classes, Getter, setter, Object, Object Private Fields, Nested Classes
+--->Use Auxilary Constructor, Primary Constructor object, Apply method
+--->Understand Packages, Override Methods, Type Cheching, Casting, Abstract Classes in Scala.
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                          Classes in Scala
+                          ~~~~~~~~~~~~~~~
+
+--->Class in Scala is very much similar to java or C++
+
+ scala> class Ctr {
+     | private var value = 0  //fields must be initialized
+     | def incr() {value +=1}
+     | def curr() = value
+     | }
+defined class Ctr
+
+--->In Scala a class is NOT declared as public
+--->A source file can contain multiple classes
+--->All of the classes could be public
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+              Properties with Getters and setters
+--> Getters and setters are better to expose class properties
+---> In java, we typically keep the instance variables as private and expose the public getters and setters
+
+       public class Duck{
+                           private int size;
+                           public int getSize() {return size; }
+                           public void setSize(int size)
+                           { (if size > 0) this.size = size}
+                            }
+
+ --->Scala provides the getters and setters for every field by defauld
+---->we define a public field
+
+scala> class Duck {
+     | var size = 1
+     | }
+defined class Duck
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                             Properties with Getters and Setters
+                             ~~~~~~~~~~~~~~~~~~~~~~~~~~
+---> Getters and Setters can be redefined as explained below:
+
+                scala> class Duck {
+     | private var privateAge = 0
+     | def age = privateAge
+     | def age_=(newAge: Int) {if (newAge > privateAge) privateAge = newAge; }
+     | }
+defined class Duck
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                      Properties with only Getters
+
+ --->Sometime we need read-only properties
+--->There are two possibilities:
+       >>The property value never changes
+       >>The value is changed indirectly
+
+--->For the first case , declare the property as val. Scala treats it as final variable and thus generates only gether, no setter
+
+--->In second case, you need to declare the field as private and provide the getter, as explained below:
+--->Semicolons are optional in scala
+ scala> class counter {
+     | private var value = 0
+     | def incr() {value +=1 }
+     | def current = value
+     | }
+defined class counter
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                                  Object -Private Fields
+                                   ~~~~~~~~~~~~~~~
+--->In Scala (and other languages as well), a method can access the private fields of its class
+
+     -->Example:
+         scala> class counter {
+     | private var value = 0
+     | def incr() {value +=1 }
+     | def current = value
+     | }
+defined class counter
+
+--->We can declare the variables as object-private by private[this] qualifier
+--->Now the methods can only access the value field of current object
+--->For the class-private field, private getter and setter are generated
+--->For object-private field, NO getter and setter methods are generated
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                              Summarizing Properties
+                               ~~~~~~~~~~~~~~~~~
+--->In Scala, the getters and sethers are generated for each property
+--->For private properties, the getter and setter are private
+--->For a val, only getters are generated
+--->In Scala you can't have a read-only property(i.e. only getter, no setter)
+--->No getters and setters are generated for object-private fields
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                        Auxiliary Constructor
+                       ~~~~~~~~~~~~~~~
+--->We can have as many constructors as we need
+---->There are two types of constructors in Scala:
+               >>Auxiliary constructor
+               >>Primary constructor
+
+--->The auxiliary constructors in scala are called this. This is different from other languages, where constructors have the same name as the class
+
+--->Each auxiliary constructor must start with a call to either a previously defined auxiliary constructors or the primary Constructor
+
+scala> class Duck{
+     | private var size =0;
+     | private var age = 0;
+     | def this(size: Int){
+     |      this() //call the primary constructor
+     | this.size = size
+     | }
+     | def this(size:Int, age:Int)
+     | {
+     |    this(size) //calls previous auxiliary constructor
+     |     this.age = age
+     | }
+     | }
+defined class Duck
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                                     Primary Constuctor
+                                     ~~~~~~~~~~~~~~
+--->Every class in scala has a primary constructor
+--->Primary constructor isn't defined by this method
+--->The parameters for primary constructor are placed immediately after the class name:
+
+       class Duck(val size:Int, val age:Int)
+        {
+         //...code for intitialization
+           }
+
+--->The primary constructor executes all the statements in the class definition, as explained below:
+
+               class Duck(val size:Int, val age:Int){
+                       println("Inside duck constructor")
+                       def desc = "Duck of age" + age + "is of size" + size
+                      }
+       defined class Duck
+--->The println statement is executed for every object creation
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                                  Nested Classes
+                                   ~~~~~~~~~~~
+--->Classes can be nested inside other classes
+
+--->Example: error
+scala> class Graph {
+     | class Member(val name: String)
+     | {
+     | val contacts = new ArrayBuffer[Member]
+     | }
+     | private val members = new ArrayBuffer[Member]
+     | def join(name: String) =
+     | {
+     | val m = new Member(name)
+     | members +=m
+     | m
+     | }
+     | }
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                                              Nested Classes(contd.)
+
+val chatter = new Graph
+val mFace = new Graph
+val fred = chatter.join("Fred")
+val Wilma = chatter.join("Wilma")
+fred.contacts += wilma
+val Barney = mFace.join("Barney")
+Fred.contacts += barney //Error!
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                                                         Singletons
+--->Scala doesn't have the concept of static methods or fields
+--->It is supported by object construct
+--->An Object defines a single instance of a class
+ ---> Example:
+       scala> object Reservations{
+     | private var lastNum = 0;
+     | def newReservationNum() = {lastNum +=1; lastNum}
+     | }
+defined object Reservations
+
+--->If we need new reservation number, we call Reservation.newReservationNum()
+--->Constructor of singleton object is executed when the object is first used
+--->An object has all the features of a class
+---->There is only one exception:-Parameters can't be provided to the constructor
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                                    Singletons Use-Cases
+
+--->Singletons can be used in scala as:
+     >>When a singleton instance is required for co-ordinating a service
+     >>when a single immutable instance could be shared for efficiency purposes
+  >> when an immutable instance is required for utility functions or constants
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                     Companion Objects
+
+--->In many programming Languages, we typically have both instance methods and static methods in same class
+--->In scala, it is achieved by companion object of same name as of class
+Exp:
+
+ class account{
+            val id = Account.newNum()
+            private var bal = 0.0
+                        .......
+              }
+              object Account {
+                         private var lastNum = 0;
+                          private def newNum() = { lastNum +=1; lastNum)
+                       }
+
+--->The class and its companion objects need to be in same source file
+--->The class and it's companion object can access each others private features
+--->The companion object of the class is accessible, but NOT in scope
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                                                        Apply Method 
+--->Scala objects typically have an apply method
+--->The general form of Apply method is: object(arg1)
+---->This is same as object.apply(arg1)
+exp:
+             class Account private(val id: Int, bal: Float) {
+                                               private var balance = bal
+                                          .....
+                      }
+                                  object Account{
+                                                       def apply(bal: Float) = new Account(new Account( newNum(), bal)
+                                                   ...
+                        }
+--->Now the new Account object can be created as follows:
+              val acct = new Account(100.0) //where as the default constructor takes two parameters!!!!
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                                                            Packages
+                                                             ~~~~~~~
+--->In scala, packages serve the same purpose as in Java: to manage the names in a large program
+--->To add the items to a package, they can be included in package statements, e.g.
+                     package com{
+                                    package spark{
+                                      package evarcity{
+                                          class Emp
+                                             ...
+                                         }
+                                       }
+                                    }
+
+--->The class Emp can be accessed from anywhere as com.spark.prwatech.Emp
+--->Unlike, classes, a package can be define in multiple files
+---->Conversely, a single file can have more than one package
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                                  Scope Rules
+--->Scope rules for packages in Scala are more consistent than java
+--->Scala packages nest just like all other scopes
+--->Member names could be accessed from enclosing scope, i.e
+                  package com{
+                          package test1{
+                             object Utils{
+                                       def sayHi = "Hi"
+                                         }
+                                package test2{
+                                 class Test{
+                                     def sayHello() {
+                                             Utils.sayHi
+                                            }
+                                         }
+                                     }
+--->Note that we just used Utils.sayHi, as the object Utils is defined in the parent package
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                    TOp of File Notation
+
+--->Instead of nested notation, we could have the package notation at the top of file also
+-->Example:
+                     package com{
+                             package spark{
+                                package evarcity{
+                                    class Emp
+                                        ...
+                                       }
+                                    }
+                                 }
+ --->is equivalent to:
+                   package com.spark
+                        package evarcity
+                           class Emp{
+                              ...
+
+  >>>===>Note: In the above example, everything belongs to package com.spark.prwatech, but the package 
+              com.spark is also opened up, so its contents could also be referred
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                     Package visibility
+                      ~~~~~~~~~~~~~~~
+>>>===>In Java, we typically control the class members by public, private or protected
+>>>===>In scala, the same effect could be achieved through qualifiers
+      -->Example:
+      package com.spark.evarcity
+                        class Employee{
+                               private[evarcity] def sayHi = "Hi"
+                                 }
+ >>>===>The visibility could also be extended to enclosing package:
+                 package com.spark.evarcity
+                                  class Employee{
+                                      private[spark] def sayHi = "Hi !"
+                                                 }
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                  Imports and Impicit Imports
+                  ~~~~~~~~~~~~~~~~~~~~~~~~~
+>>>====>Packages/ classes can be imported in scala 
+>>>=====>Import serve the same purpose as in java:
+         >>To use short names instead of long ones
+
+>>>====>All the Members of package can be importd as:
+         >>import java.awt._
+          >>Note that"_"is used instead of "*"
+>>>====>In scala, imports can be anywhere, instead of being at the top of the file, unlike java
+>>>====>We can use selectors to import only few members of a package like:
+      >> import java.awt.{Color,Font}
+            >>import java.long._
+              >>import scala._
+                >.import predef._
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                         Extending a class
+                         ~~~~~~~~~~~~~~~
+--->Just like java, classes can be extened using extends keyword
+       class Dog extends Animal{
+                                    var size: 1.0
+                                           ...
+                             }
+example:
+scala> class Animal {
+     | println("Animals")
+     | }
+defined class Animal
+
+scala> class Dog extends Animal{
+     | println("Animalssssss")
+     | }
+defined class Dog
+
+scala> final class Animal {
+     | println("Animals")
+     | }
+defined class Animal
+
+scala> class Dog extends Animal {
+     | println("Animalsssss")
+     | }
+<console>:11: error: illegal inheritance from final class Animal
+       class Dog extends Animal {
+                         ^
+
+
+
+
+--->Just like java methods and fields can be introduced
+     or superclass methods or fields could be overridden in subclasses
+
+--->A class can be declared as final to avoid it being extended
+
+--->Unlike java, individual as final to method could also be marked as final to avoid them being 
+      overridden
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                           Overriding Methods
+
+   --->override modifier must be used to override an abstract method:
+
+                 public class Dog{
+                                   ....
+                              override def bark = {"woof"}
+                                   ...
+                         }
+--->The override modifier is useful in following scenarios:
+        >>When name of the method being overridden is misspelled
+         >>when a wrong parameter type is provided
+            >>When a new method is introduced in superclass which clashes with a subclass method
+         >>Invoking superclass method is same as in java, by super keyword:
+
+            public class Employee extends person{
+                                                 ...
+                                 override def toString = super.toString + "Hi..!"
+                  }
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+               Type Checking and Casting
+ 
+ --->isInstanceOf method is used to decide whether an object belongs to a class:
+         if(a.isInstanceOf(Employee)){
+                                 val b = a.asInstanceOf(Employee) //b has the type Employee
+                                    ...
+                   }
+--->asInstanceOf method is used to convert to a subclass reference
+--->classOf method is used to detemine the class of a given reference:
+         if(a.getClass == classOf[Employee]{
+                          ...
+                          }
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                        Superclass Construction 
+--->All the classes have a primary constructor and many auxiliary constructors, and all the auxiliary constructor should either call a primary constructor or previous constructor
+
+ --->It means an auxiliary constructor can never invoke a superclass constructor directly
+
+       class Emp(name:String, dept, salary: Double) extends
+               person(name, dept){
+                              ...
+                       }
+--->putting the class and constructor together makes a very short code in scala
+--->The Emp class has three parameters, out of which, two are passed to its superclass person
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                       Abstract Classes
+ -->just like java, you can use the abstract keyword for a class, which cann't be instantiated:
+
+            abstract class Emp (name:String){
+                                  def id: Int //only method declaration, no body
+                                  }
+
+--->Here we declared a method to generate id, but didn't provide implementation
+--->Each concrete subclass of Emp should provide the implementation of id
+--->In a subclass, we don't need to specify override while defining an abstract superclass method:
+      
+        class PrwatechEmp(name:String) extends person(name){
+                                  def id = name.hashCode //override keyword not equired
+                 }
